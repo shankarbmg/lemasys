@@ -2,15 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `slms` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
-USE `slms` ;
 
 -- -----------------------------------------------------
--- Table `slms`.`config_tbl`
+-- Table `lemasys`.`config_tbl`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`config_tbl` ;
+DROP TABLE IF EXISTS `lemasys`.`config_tbl` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`config_tbl` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`config_tbl` (
   `max_sl` INT(11) NOT NULL ,
   `max_cl` INT(11) NOT NULL ,
   `el_12_mnths` DECIMAL(4,2) NOT NULL ,
@@ -37,11 +35,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_application`
+-- Table `lemasys`.`leave_application`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_application` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_application` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_application` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_application` (
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `current_Status` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   UNIQUE INDEX `leave_id` (`leave_id` ASC) )
@@ -51,11 +49,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_approved`
+-- Table `lemasys`.`leave_approved`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_approved` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_approved` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_approved` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_approved` (
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `approved_by` CHAR(6) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `approved_on` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
@@ -66,11 +64,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_rejected`
+-- Table `lemasys`.`leave_rejected`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_rejected` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_rejected` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_rejected` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_rejected` (
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `rejected_by` CHAR(6) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `rejected_on` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
@@ -82,11 +80,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_reapplied`
+-- Table `lemasys`.`leave_reapplied`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_reapplied` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_reapplied` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_reapplied` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_reapplied` (
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `new_leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   UNIQUE INDEX `leave_id` (`leave_id` ASC) )
@@ -96,11 +94,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_taken`
+-- Table `lemasys`.`leave_taken`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_taken` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_taken` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_taken` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_taken` (
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `rec_moved_on` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   PRIMARY KEY (`leave_id`) )
@@ -110,11 +108,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`leave_master`
+-- Table `lemasys`.`leave_master`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`leave_master` ;
+DROP TABLE IF EXISTS `lemasys`.`leave_master` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`leave_master` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`leave_master` (
   `sno` INT(11) NOT NULL AUTO_INCREMENT ,
   `leave_id` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `emp_id` CHAR(6) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
@@ -122,31 +120,32 @@ CREATE  TABLE IF NOT EXISTS `slms`.`leave_master` (
   `leave_applied_on` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `leave_start_date` VARCHAR(25) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `num_of_days` DECIMAL(4,1) NOT NULL ,
+  `leave_applied_by` CHAR(6) NOT NULL ,
   PRIMARY KEY (`sno`) ,
   UNIQUE INDEX `leave_id` (`leave_id` ASC) ,
   CONSTRAINT `fk_leave_master_leave_application`
     FOREIGN KEY (`leave_id` )
-    REFERENCES `slms`.`leave_application` (`leave_id` )
+    REFERENCES `lemasys`.`leave_application` (`leave_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_leave_master_leave_approved1`
     FOREIGN KEY (`leave_id` )
-    REFERENCES `slms`.`leave_approved` (`leave_id` )
+    REFERENCES `lemasys`.`leave_approved` (`leave_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_leave_master_leave_rejected1`
     FOREIGN KEY (`leave_id` )
-    REFERENCES `slms`.`leave_rejected` (`leave_id` )
+    REFERENCES `lemasys`.`leave_rejected` (`leave_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_leave_master_leave_reapplied1`
     FOREIGN KEY (`leave_id` )
-    REFERENCES `slms`.`leave_reapplied` (`leave_id` )
+    REFERENCES `lemasys`.`leave_reapplied` (`leave_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_leave_master_leave_taken1`
     FOREIGN KEY (`leave_id` )
-    REFERENCES `slms`.`leave_taken` (`leave_id` )
+    REFERENCES `lemasys`.`leave_taken` (`leave_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -155,11 +154,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`dept_table`
+-- Table `lemasys`.`dept_table`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`dept_table` ;
+DROP TABLE IF EXISTS `lemasys`.`dept_table` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`dept_table` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`dept_table` (
   `dept_sno` INT NOT NULL AUTO_INCREMENT ,
   `dept_code` CHAR(4) NULL ,
   `dept_name` VARCHAR(100) NULL ,
@@ -168,11 +167,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`emp_details`
+-- Table `lemasys`.`emp_details`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`emp_details` ;
+DROP TABLE IF EXISTS `lemasys`.`emp_details` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`emp_details` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`emp_details` (
   `sno` INT NOT NULL AUTO_INCREMENT ,
   `emp_id` CHAR(6) NOT NULL ,
   `date_of_birth` CHAR(6) NOT NULL ,
@@ -184,11 +183,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`emp_master`
+-- Table `lemasys`.`emp_master`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`emp_master` ;
+DROP TABLE IF EXISTS `lemasys`.`emp_master` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`emp_master` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`emp_master` (
   `sno` INT(11) NOT NULL ,
   `emp_id` CHAR(6) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `emp_name` VARCHAR(125) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
@@ -200,17 +199,17 @@ CREATE  TABLE IF NOT EXISTS `slms`.`emp_master` (
   INDEX `fk_emp_master_dept_table1` (`dept_code` ASC) ,
   CONSTRAINT `fk_emp_details_leave_master1`
     FOREIGN KEY (`emp_id` )
-    REFERENCES `slms`.`leave_master` (`emp_id` )
+    REFERENCES `lemasys`.`leave_master` (`emp_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_emp_master_dept_table1`
     FOREIGN KEY (`dept_code` )
-    REFERENCES `slms`.`dept_table` (`dept_code` )
+    REFERENCES `lemasys`.`dept_table` (`dept_code` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_emp_master_emp_details1`
     FOREIGN KEY (`emp_id` )
-    REFERENCES `slms`.`emp_details` (`emp_id` )
+    REFERENCES `lemasys`.`emp_details` (`emp_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -219,11 +218,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`table_to_user`
+-- Table `lemasys`.`table_to_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`table_to_user` ;
+DROP TABLE IF EXISTS `lemasys`.`table_to_user` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`table_to_user` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`table_to_user` (
   `cl_table_name` VARCHAR(15) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `sl_table_name` VARCHAR(15) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL ,
   `el_table_name` VARCHAR(15) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL )
@@ -233,11 +232,11 @@ COLLATE = utf8_bin;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`holiday_2011`
+-- Table `lemasys`.`holiday_2011`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`holiday_2011` ;
+DROP TABLE IF EXISTS `lemasys`.`holiday_2011` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`holiday_2011` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`holiday_2011` (
   `idholiday_2011` INT NOT NULL AUTO_INCREMENT ,
   `date` VARCHAR(45) NOT NULL ,
   `date` VARCHAR(25) NOT NULL ,
@@ -247,11 +246,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `slms`.`logon`
+-- Table `lemasys`.`logon`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `slms`.`logon` ;
+DROP TABLE IF EXISTS `lemasys`.`logon` ;
 
-CREATE  TABLE IF NOT EXISTS `slms`.`logon` (
+CREATE  TABLE IF NOT EXISTS `lemasys`.`logon` (
   `userid` INT NOT NULL ,
   `username` VARCHAR(75) NOT NULL ,
   `useremail` VARCHAR(150) NOT NULL ,
